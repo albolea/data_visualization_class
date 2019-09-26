@@ -1,0 +1,48 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+# Clear environment
+rm(list = ls(all = TRUE))
+
+# Clear environmet of packages
+if(is.null(sessionInfo()$otherPkgs) == FALSE)lapply(paste("package:", names(sessionInfo()$otherPkgs), sep=""), detach, character.only = TRUE, unload = TRUE)
+
+# Load Packages
+library(tidyverse)
+library(here)
+```
+
+```{r}
+#read database
+oj <- read_csv(here('PA_1','OJ_Data.csv'))
+
+#first look on the base
+str(oj)
+oj %>% head()
+summary(oj)
+
+#additional variables
+oj <- oj %>% mutate(Purchase_CH = ifelse(Purchase == "CH",1, 0),
+                    CH_Cheaper =  ifelse(PriceCH < PriceMM, 1, 0)
+                    )
+oj %>% head()
+summary(oj)
+
+oj %>% select(Purchase_CH, CH_Cheaper) %>% table
+
+oj %>% select(Purchase_CH, CH_Cheaper) %>% table %>% prop.table
+
+oj %>% filter(STORE == 1) %>% select(Purchase_CH, CH_Cheaper) %>% table %>% prop.table
+
+oj %>% filter(STORE == 2) %>% select(Purchase_CH, CH_Cheaper) %>% table %>% prop.table
+
+oj %>% filter(STORE == 3) %>% select(Purchase_CH, CH_Cheaper) %>% table %>% prop.table
+
+oj %>% filter(STORE == 4) %>% select(Purchase_CH, CH_Cheaper) %>% table %>% prop.table
+```
+
